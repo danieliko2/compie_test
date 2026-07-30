@@ -1,0 +1,29 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+    
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # 1. Replace AWS Account ID and Role Name
+          role-to-assume: arn:aws:iam::367425865577:role/GitHubActionsECRPushRole
+          # 2. Replace with your AWS Region if not us-east-1
+          aws-region: us-east-
+
+      - id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push
+        run: |
+          # 3. Replace repository path (e.g., daniel_dev/compie_app)
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/daniel_dev/compie_app:${{ github.sha }} . # <-- UPDATE THIS
+          docker push ${{ steps.login-ecr.outputs.registry }}/daniel_dev/compie_app:${{ github.sha }} # <-- UPDATE THIS
