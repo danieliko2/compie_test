@@ -18,10 +18,8 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          # 1. Replace AWS Account ID and Role Name
           role-to-assume: arn:aws:iam::367425865577:role/GitHubActionsECRPushRole
-          # 2. Replace with your AWS Region if not us-east-1
-          aws-region: us-east-
+          aws-region: us-east-1
 
       - id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
