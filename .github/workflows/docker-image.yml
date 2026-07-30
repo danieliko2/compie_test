@@ -1,14 +1,10 @@
 name: Docker Image CI
 
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+on: [push]
 
 permissions:
-  id-token: write # Required for AWS OIDC authentication
-  contents: read  # Required for checkout
+  id-token: write
+  contents: read
 
 jobs:
   build-and-push:
@@ -18,7 +14,7 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::367425865577:role/GitHubActionsECRPushRole
+          role-to-assume: arn:aws:iam::367425865577:role/YOUR_IAM_ROLE_NAME
           aws-region: us-east-1
 
       - id: login-ecr
@@ -26,6 +22,5 @@ jobs:
 
       - name: Build and push
         run: |
-          # 3. Replace repository path (e.g., daniel_dev/compie_app)
-          docker build -t ${{ steps.login-ecr.outputs.registry }}/daniel_dev/compie_app:${{ github.sha }} . # <-- UPDATE THIS
-          docker push ${{ steps.login-ecr.outputs.registry }}/daniel_dev/compie_app:${{ github.sha }} # <-- UPDATE THIS
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/daniel_dev/compie_app:${{ github.sha }} .
+          docker push ${{ steps.login-ecr.outputs.registry }}/daniel_dev/compie_app:${{ github.sha }}
